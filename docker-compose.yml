@@ -1,0 +1,13 @@
+version: "3.9"
+services:
+  python2:
+    build: .
+    entrypoint: python2
+    working_dir: /home
+    environment:
+      - DISPLAY=unix$DISPLAY
+    volumes:
+      - type: bind
+        source: $PWD
+        target: /home
+      - /tmp/.X11-unix:/tmp/.X11-unix
