@@ -26,7 +26,7 @@ from game import Directions
 # Some code from a Pacman implementation by LiveWires, and used / modified with permission.
 
 DEFAULT_GRID_SIZE = 30.0
-INFO_PANE_HEIGHT = 35
+INFO_PANE_HEIGHT = 80
 BACKGROUND_COLOR = formatColor(0, 0, 0)
 WALL_COLOR = formatColor(0.0 / 255.0, 51.0 / 255.0, 255.0 / 255.0)
 INFO_PANE_COLOR = formatColor(.4, .4, 0)
@@ -142,7 +142,7 @@ class InfoPane:
             size = 10
 
         for i, d in enumerate(distances):
-            t = text(self.toScreen(self.width / 2 + self.width / 8 * i, 0),
+            t = text(self.toScreen(self.width / 2 + self.width / 8 * i, 40),
                      GHOST_COLORS[i + 1], d, "Times", size, "bold")
             self.ghostDistanceText.append(t)
 
