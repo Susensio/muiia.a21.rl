@@ -12,6 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
+from pathlib import Path
 import sys
 import random
 from distanceCalculator import Distancer
@@ -266,13 +267,9 @@ class RLAgent(BustersAgent):
         self.epsilon = 1
         ##########################################################################
         self.nColumnsQTable = 4
-        if os.path.isfile("qtable.txt"):
-            self.table_file = open("qtable.txt", "r+")
-            self.q_table = self.readQtable()
-        else:
-            self.table_file = open("qtable.txt", "w")
-            self.q_table = (np.zeros((self.nRowsQTable, self.nColumnsQTable))).tolist()
-            self.writeQtable()
+
+        self.table_file = Path("qtable.txt")
+        self.q_table = self.readQtable() or self.initQtable()
 
     ''' Example of counting something'''
 
@@ -321,27 +318,35 @@ class RLAgent(BustersAgent):
         # Puntuacion
         print("\tScore: ", gameState.getScore())
 
+    def initQtable(self):
+        "Initialize qtable"
+        return (np.zeros((self.nRowsQTable, self.nColumnsQTable)).tolist())
+
     def readQtable(self):
         "Read qtable from disc"
-        table = self.table_file.readlines()
+        if not self.table_file.is_file():
+            return None
+
+        content = self.table_file.read_text()
+
+        if content == '':
+            return None
+
         q_table = []
 
-        for i, line in enumerate(table):
-            row = line.split()
-            row = [float(x) for x in row]
-            q_table.append(row)
+        for line in content.split('\n'):
+            values = [float(x) for x in line.split()]
+            q_table.append(values)
 
         return q_table
 
     def writeQtable(self):
         "Write qtable to disc"
-        self.table_file.seek(0)
-        self.table_file.truncate()
-
+        with open(self.table_file, 'w') as f:
         for line in self.q_table:
             for item in line:
-                self.table_file.write(str(item) + " ")
-            self.table_file.write("\n")
+                    f.write(str(item) + " ")
+                f.write("\n")
 
     def computePosition(self, state):
         """
