@@ -343,10 +343,10 @@ class RLAgent(BustersAgent):
     def writeQtable(self):
         "Write qtable to disc"
         with open(self.table_file, 'w') as f:
-        for line in self.q_table:
-            for item in line:
+            for line in self.q_table:
+                for item in line:
                     f.write(str(item) + " ")
-                f.write("\n")
+                    f.write("\n")
 
     def computePosition(self, state):
         """
